@@ -6,13 +6,13 @@ namespace Data.Entities;
 public class SavedCourseEntity
 {
 	
-	public string UserId { get; set; } = null!;
+	//public string UserId { get; set; } = null!;
 
-	[ForeignKey("UserId")]
-	public UserEntity User { get; set; } = null!;
+	//[ForeignKey("UserId")]
+	//public UserEntity User { get; set; } = null!;
 
-	public int CourseId { get; set; }
+	//public int CourseId { get; set; }
 
-	[ForeignKey("CourseId")]
-	public CourseEntity Course { get; set; } = null!;
+	//[ForeignKey("CourseId")]
+	//public CourseEntity Course { get; set; } = null!;
 }

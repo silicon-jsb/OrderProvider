@@ -6,10 +6,10 @@ using System.Data.Entity;
 
 namespace Data.Context;
 
-public class DataContext(DbContextOptions options) : IdentityDbContext<SavedCourseEntity>(options)
-{
-	public DbSet<SavedCourseEntity> SavedCourses { get; set; }
+//public class DataContext(DbContextOptions options) : IdentityDbContext<SavedCourseEntity>(options)
+//{
+//	public DbSet<SavedCourseEntity> SavedCourses { get; set; }
 
-}
+//}
 
 
