@@ -34,14 +34,14 @@ public class CourseService
 		return serviceResponse;
 	}
 
-	//get from clientside
-	public async Task<ServiceResponse<IEnumerable<SavedCoursesEntity>>> GetSavedCoursesForUser(string userId)
+	//get all from clientside
+	public async Task<ServiceResponse<IEnumerable<SavedCoursesEntity>>> GetSavedCourseById(string userId)
 	{
 		var serviceResponse = new ServiceResponse<IEnumerable<SavedCoursesEntity>>();
 		try
 		{
 			serviceResponse.Data = await _context.SavedCourses
-				.Include(sc => sc.Course)
+				.Include(sc => sc.CourseId)
 				.Where(sc => sc.UserId == userId)
 				.ToListAsync();
 		}
@@ -53,6 +53,29 @@ public class CourseService
 		}
 		return serviceResponse;
 	}
+
+	//get one from clientside
+	public async Task<ServiceResponse<SavedCoursesEntity>> GetSavedCourseById(int id)
+	{
+		ServiceResponse<SavedCoursesEntity> response = new ServiceResponse<SavedCoursesEntity>();
+		try
+		{
+			response.Data = await _context.SavedCourses.FindAsync(id);
+			if (response.Data == null)
+			{
+				response.Success = false;
+				response.Message = $"Saved course with ID {id} not found.";
+			}
+		}
+		catch (Exception ex)
+		{
+			response.Success = false;
+			response.Message = $"An error occurred while fetching the saved course: {ex.Message}";
+		}
+
+		return response;
+	}
+
 
 	//post from clientside
 	public async Task<ServiceResponse<SavedCoursesEntity>> SaveCourse(SavedCoursesEntity savedCourse)
