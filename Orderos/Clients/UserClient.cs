@@ -11,9 +11,9 @@ public class UserClient
 		_client = client;
 	}
 
-	public async Task<UserEntity> GetUserById(string userId)
-	{
-		HttpResponseMessage response = await _client.GetAsync($"api/users/{userId}");
-		return await response.Content.ReadAsAsync<UserEntity>();
-	}
+	//public async Task<UserEntity> GetUserById(string userId)
+	//{
+	//	HttpResponseMessage response = await _client.GetAsync($"api/users/{userId}");
+	//	return await response.Content.ReadAsAsync<UserEntity>();
+	//}
 }

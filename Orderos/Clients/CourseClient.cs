@@ -10,9 +10,9 @@ public class CourseClient
 		_client = client;
 	}
 
-	public async Task<CourseEntity> GetCourseById(int courseId)
-	{
-		HttpResponseMessage response = await _client.GetAsync($"api/courses/{courseId}");
-		return await response.Content.ReadAsAsync<CourseEntity>();
-	}
+	//public async Task<CoursesEntity> GetCourseById(int courseId)
+	//{
+	//	HttpResponseMessage response = await _client.GetAsync($"api/courses/{courseId}");
+	//	return await response.Content.ReadAsAsync<CourseEntity>();
+	//}
 }
