@@ -1,0 +1,79 @@
+﻿@using System.Net.Http
+
+@page "/orders"
+@attribute [StreamRendering]
+
+<PageTitle>Orders</PageTitle>
+
+<h1>Orders</h1>
+
+@if (orders == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>User</th>
+                <th>Course ID</th>
+                <th>Course</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in orders)
+            {
+                <tr>
+                    <td>@order.Id</td>
+                    <td>@order.UserId</td>
+                    <td>@order.CourseId</td>
+                    <td>@order.CourseTitle</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@if (!string.IsNullOrEmpty(ErrorMessage))
+{
+    <p class="text-danger">@ErrorMessage</p>
+}
+
+@code {
+    [Inject]
+    private HttpClient? HttpClient { get; set; }
+
+    private string? ErrorMessage { get; set; }
+
+    private Order[]? orders;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var response = await HttpClient.GetAsync("https://orderprovider-silicon-jsb.azurewebsites.net/api/orders");
+            if (response.IsSuccessStatusCode)
+            {
+                orders = await response.Content.ReadFromJsonAsync<Order[]>();
+            }
+            else
+            {
+                ErrorMessage = "Failed to fetch saved courses. Please try again later.";
+            }
+        }
+        catch (Exception ex)
+        {
+            ErrorMessage = "An error occurred while fetching saved courses. " + ex.Message;
+        }
+    }
+
+    private class Order
+    {
+        public int Id { get; set; }
+        public string UserId { get; set; } = null!;
+        public string? CourseId { get; set; }
+        public string CourseTitle { get; set; } = null!;
+    }
+}
