@@ -6,6 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Orderos.Clients;
 using Orderos.Data;
 using Orderos.Repositories;
+using Orderos.Services;
 
 var host = new HostBuilder()
 	.ConfigureFunctionsWebApplication()
@@ -20,13 +21,14 @@ var host = new HostBuilder()
 		services.AddApplicationInsightsTelemetryWorkerService();
 		services.ConfigureFunctionsApplicationInsights();
 		services.AddScoped<SavedCoursesRepository>();
+		services.AddScoped<CourseService>();
 		services.AddDbContext<DataContext>(options =>
-		options.UseSqlServer(configuration.GetConnectionString("ORDERS_DATABASE")));
+			options.UseSqlServer(configuration.GetConnectionString("ORDERS_DATABASE")));
 
 
+		//fix this part
 
-
-	   services.AddHttpClient<UserClient>(client =>
+		services.AddHttpClient<UserClient>(client =>
 		{
 			client.BaseAddress = new Uri("https://your-user-service-url");
 		});
@@ -35,7 +37,9 @@ var host = new HostBuilder()
 		{
 			client.BaseAddress = new Uri("https://your-course-service-url");
 		});
-	})
+       
+
+    })
 	.Build();
 
 host.Run();

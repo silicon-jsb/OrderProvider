@@ -10,9 +10,21 @@ public class CourseClient
 		_client = client;
 	}
 
-	//public async Task<CoursesEntity> GetCourseById(int courseId)
+	//public async Task<CourseEntity> GetCourseById(int courseId)
 	//{
 	//	HttpResponseMessage response = await _client.GetAsync($"api/courses/{courseId}");
-	//	return await response.Content.ReadAsAsync<CourseEntity>();
+
+	//	if (response.IsSuccessStatusCode)
+	//	{
+	//		return await response.Content.ReadAsAsync<CourseEntity>();
+	//	}
+	//	else
+	//	{
+	//		// Handle the error response
+	//		// For example, throw an exception or return a default value
+	//		return null;
+	//	}
 	//}
+
+	
 }

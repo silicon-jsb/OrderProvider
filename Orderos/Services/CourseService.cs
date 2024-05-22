@@ -18,7 +18,7 @@ public class CourseService
 	}
 
 	//get from backoffice
-	public async Task<ServiceResponse<IEnumerable<SavedCoursesEntity>>> GetSavedCourses()
+	public async Task<ServiceResponse<IEnumerable<SavedCoursesEntity>>> GetAllSavedCourses()
 	{
 		var serviceResponse = new ServiceResponse<IEnumerable<SavedCoursesEntity>>();
 		try
@@ -98,7 +98,7 @@ public class CourseService
 
 
 	//delete from clientside
-	public async Task<ServiceResponse<bool>> DeleteCourse(SavedCoursesEntity savedCourse)
+	public async Task<ServiceResponse<bool>> DeleteSavedCourse(SavedCoursesEntity savedCourse)
 	{
 		var serviceResponse = new ServiceResponse<bool>();
 		try

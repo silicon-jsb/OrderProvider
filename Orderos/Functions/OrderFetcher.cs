@@ -20,13 +20,13 @@ namespace Orderos.Functions
 			_courseService = courseService;
 		}
 
-        [Function("GetAllCourses")]	
-		public async Task<IActionResult> GetAllCourses( 
-		[HttpTrigger(AuthorizationLevel.Function, "get", Route = null)] HttpRequest req)
+        [Function("GetAllSavedCourses")]	
+		public async Task<IActionResult> GetAllSavedCourses( 
+		[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders")] HttpRequest req)
 		{
 			_logger.LogInformation("C# HTTP trigger function processed a request.");
 
-			var serviceResponse = await _courseService.GetSavedCourses();
+			var serviceResponse = await _courseService.GetAllSavedCourses();
 
 			if (!serviceResponse.Success)
 			{
@@ -37,9 +37,9 @@ namespace Orderos.Functions
 			return new OkObjectResult(serviceResponse.Data);
 		}
 
-		[Function("GetCourse")]
-		public async Task<IActionResult> GetCourse(
-		[HttpTrigger(AuthorizationLevel.Function, "get", Route = "courses/{id}")] HttpRequest req, int id)
+		[Function("GetSavedCourse")]
+		public async Task<IActionResult> GetSavedCourse(
+		[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders/{id}")] HttpRequest req, int id)
 		{
 			var serviceResponse = await _courseService.GetSavedCourseById(id);
 			if (!serviceResponse.Success)
@@ -71,9 +71,9 @@ namespace Orderos.Functions
 			return new OkObjectResult(serviceResponse.Data);
 		}
 
-		[Function("DeleteCourse")]
-		public async Task<IActionResult> DeleteCourse(
-		[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "courses/{id}")] HttpRequest req, int id)
+		[Function("DeleteSavedCourse")]
+		public async Task<IActionResult> DeleteSavedCourse(
+		[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "orders/{id}")] HttpRequest req, int id)
 		{
 			var serviceResponse = await _courseService.GetSavedCourseById(id);
 			if (!serviceResponse.Success)
@@ -82,7 +82,7 @@ namespace Orderos.Functions
 				return new NotFoundResult();
 			}
 
-			var deleteResponse = await _courseService.DeleteCourse(serviceResponse.Data);
+			var deleteResponse = await _courseService.DeleteSavedCourse(serviceResponse.Data);
 
 			if (!deleteResponse.Success)
 			{
