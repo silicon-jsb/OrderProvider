@@ -7,8 +7,6 @@
 
 <h1>Orders</h1>
 
-<p>This component demonstrates showing data.</p>
-
 @if (orders == null)
 {
     <p><em>Loading...</em></p>
@@ -20,8 +18,8 @@ else
             <tr>
                 <th>ID</th>
                 <th>User</th>
-                <th>Course</th>
                 <th>Course ID</th>
+                <th>Course</th>
             </tr>
         </thead>
         <tbody>
@@ -55,7 +53,7 @@ else
     {
         try
         {
-            var response = await HttpClient.GetAsync("https://orderprovider-silicon-jsb.azurewebsites.net/api/savedcourses");
+            var response = await HttpClient.GetAsync("https://orderprovider-silicon-jsb.azurewebsites.net/api/orders");
             if (response.IsSuccessStatusCode)
             {
                 orders = await response.Content.ReadFromJsonAsync<Order[]>();
