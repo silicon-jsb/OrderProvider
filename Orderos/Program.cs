@@ -1,3 +1,4 @@
+using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -24,18 +25,25 @@ var host = new HostBuilder()
 		services.AddScoped<CourseService>();
 		services.AddDbContext<DataContext>(options =>
 			options.UseSqlServer(configuration.GetConnectionString("ORDERS_DATABASE")));
+        services.AddSingleton(serviceProvider =>
+        {
+            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
+            var serviceBusConnectionString = configuration.GetConnectionString("ServiceBusConnectionString");
+            return new ServiceBusClient(serviceBusConnectionString);
+        });
 
 
-		//fix this part
 
-		services.AddHttpClient<UserClient>(client =>
+        //fix this part
+
+        services.AddHttpClient<UserClient>(client =>
 		{
 			client.BaseAddress = new Uri("https://your-user-service-url");
 		});
 			
 		services.AddHttpClient<CourseClient>(client =>
 		{
-			client.BaseAddress = new Uri("https://your-course-service-url");
+			client.BaseAddress = new Uri("https://CourseProvider.servicebus.windows.net/courseprovider");
 		});
        
 
