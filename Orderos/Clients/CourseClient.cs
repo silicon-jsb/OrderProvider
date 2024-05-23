@@ -1,4 +1,7 @@
 ﻿using Azure.Messaging.ServiceBus;
+using Microsoft.Azure.Amqp.Framing;
+using Newtonsoft.Json;
+using Orderos.Models;
 using System.Threading.Tasks;
 
 namespace Orderos.Clients
@@ -7,11 +10,13 @@ namespace Orderos.Clients
     {
         private readonly HttpClient _client;
         private readonly ServiceBusProcessor _processor;
+        private readonly Dictionary<int, Course> _courses = new Dictionary<int, Course>();
 
-        public CourseClient(HttpClient client, ServiceBusClient serviceBusClient)
+
+        public CourseClient(HttpClient client, ServiceBusClient serviceBusClient, string OrderQ)
         {
             _client = client;
-            _processor = serviceBusClient.CreateProcessor("CourseProvider");
+            _processor = serviceBusClient.CreateProcessor(OrderQ);
             _processor.ProcessMessageAsync += MessageHandler;
             _processor.ProcessErrorAsync += ErrorHandler;
         }
@@ -28,20 +33,29 @@ namespace Orderos.Clients
 
         private Task MessageHandler(ProcessMessageEventArgs args)
         {
-            
             string courseData = args.Message.Body.ToString();
+            Course? course = JsonConvert.DeserializeObject<Course>(courseData);
 
-            // TODO: Update your application state or display the updated course information to the user
-      
+            _courses[course.Id] = course;
+
+            Console.WriteLine($"Received course with ID {course.Id} and title {course.Title}");
+
             return args.CompleteMessageAsync(args.Message);
         }
 
+
         private Task ErrorHandler(ProcessErrorEventArgs args)
         {
-            // TODO: Handle the error
             Console.WriteLine(args.Exception.ToString());
             return Task.CompletedTask;
         }
+
+        public Course GetCourseById(int courseId)
+        {
+            _courses.TryGetValue(courseId, out var course);
+            return course!;
+        }
+
     }
 }
 

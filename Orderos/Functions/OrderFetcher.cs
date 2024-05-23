@@ -7,91 +7,101 @@ using Newtonsoft.Json;
 using Orderos.Entities;
 using Orderos.Services;
 
-namespace Orderos.Functions
+namespace Orderos.Functions;
+
+public class OrderFetcher
 {
-    public class OrderFetcher
+    private readonly ILogger<OrderFetcher> _logger;
+	private readonly CourseService _courseService;
+	private readonly UserService _userService;
+
+    public OrderFetcher(ILogger<OrderFetcher> logger, CourseService courseService, UserService userService)
     {
-        private readonly ILogger<OrderFetcher> _logger;
-		private readonly CourseService _courseService;
+        _logger = logger;
+		_courseService = courseService;
+		_userService = userService;
+    }
 
-		public OrderFetcher(ILogger<OrderFetcher> logger, CourseService courseService)
-        {
-            _logger = logger;
-			_courseService = courseService;
-		}
+    [Function("GetAllSavedCourses")]	
+	public async Task<IActionResult> GetAllSavedCourses( 
+	[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders")] HttpRequest req)
+	{
+		_logger.LogInformation("C# HTTP trigger function processed a request.");
 
-        [Function("GetAllSavedCourses")]	
-		public async Task<IActionResult> GetAllSavedCourses( 
-		[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders")] HttpRequest req)
+		var serviceResponse = await _courseService.GetAllSavedCourses();
+
+		if (!serviceResponse.Success)
 		{
-			_logger.LogInformation("C# HTTP trigger function processed a request.");
-
-			var serviceResponse = await _courseService.GetAllSavedCourses();
-
-			if (!serviceResponse.Success)
-			{
-				_logger.LogError(serviceResponse.Message);
-				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-			}
-
-			return new OkObjectResult(serviceResponse.Data);
+			_logger.LogError(serviceResponse.Message);
+			return new StatusCodeResult(StatusCodes.Status500InternalServerError);
 		}
 
-		[Function("GetSavedCourse")]
-		public async Task<IActionResult> GetSavedCourse(
-		[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders/{id}")] HttpRequest req, int id)
+		return new OkObjectResult(serviceResponse.Data);
+	}
+
+
+	[Function("GetSavedCourse")]
+	public async Task<IActionResult> GetSavedCourse(
+	[HttpTrigger(AuthorizationLevel.Function, "get", Route = "orders/{id}")] HttpRequest req, int id)
+	{
+		var serviceResponse = await _courseService.GetSavedCourseById(id);
+		if (!serviceResponse.Success)
 		{
-			var serviceResponse = await _courseService.GetSavedCourseById(id);
-			if (!serviceResponse.Success)
-			{
-				_logger.LogError(serviceResponse.Message);
-				return new NotFoundResult();
-			}
-
-			return new OkObjectResult(serviceResponse.Data);
+			_logger.LogError(serviceResponse.Message);
+			return new NotFoundResult();
 		}
 
+		return new OkObjectResult(serviceResponse.Data);
+	}
 
 
-		[Function("SaveCourse")]
-		public async Task<IActionResult> SaveCourse(
-		[HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req)
+
+	[Function("SaveCourse")]
+	public async Task<IActionResult> SaveCourse(
+	[HttpTrigger(AuthorizationLevel.Function, "post", Route = null)] HttpRequest req)
+	{
+		string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
+		var savedCourse = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
+
+            // Get the user
+            var userResponse = await _userService.GetUser(savedCourse.UserId);
+            if (!userResponse.Success)
+            {
+                _logger.LogError(userResponse.Message);
+                return new NotFoundResult();
+            }
+
+            var serviceResponse = await _courseService.SaveCourse(savedCourse);
+
+		if (!serviceResponse.Success)
 		{
-			string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-			var savedCourse = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
-
-			var serviceResponse = await _courseService.SaveCourse(savedCourse);
-
-			if (!serviceResponse.Success)
-			{
-				_logger.LogError(serviceResponse.Message);
-				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-			}
-
-			return new OkObjectResult(serviceResponse.Data);
+			_logger.LogError(serviceResponse.Message);
+			return new StatusCodeResult(StatusCodes.Status500InternalServerError);
 		}
 
-		[Function("DeleteSavedCourse")]
-		public async Task<IActionResult> DeleteSavedCourse(
-		[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "orders/{id}")] HttpRequest req, int id)
+		return new OkObjectResult(serviceResponse.Data);
+	}
+
+	[Function("DeleteSavedCourse")]
+	public async Task<IActionResult> DeleteSavedCourse(
+	[HttpTrigger(AuthorizationLevel.Function, "delete", Route = "orders/{id}")] HttpRequest req, int id)
+	{
+		var serviceResponse = await _courseService.GetSavedCourseById(id);
+		if (!serviceResponse.Success)
 		{
-			var serviceResponse = await _courseService.GetSavedCourseById(id);
-			if (!serviceResponse.Success)
-			{
-				_logger.LogError(serviceResponse.Message);
-				return new NotFoundResult();
-			}
-
-			var deleteResponse = await _courseService.DeleteSavedCourse(serviceResponse.Data);
-
-			if (!deleteResponse.Success)
-			{
-				_logger.LogError(deleteResponse.Message);
-				return new StatusCodeResult(StatusCodes.Status500InternalServerError);
-			}
-
-			return new OkResult();
+			_logger.LogError(serviceResponse.Message);
+			return new NotFoundResult();
 		}
+
+		var deleteResponse = await _courseService.DeleteSavedCourse(serviceResponse.Data);
+
+		if (!deleteResponse.Success)
+		{
+			_logger.LogError(deleteResponse.Message);
+			return new StatusCodeResult(StatusCodes.Status500InternalServerError);
+		}
+
+		return new OkResult();
 	}
 }
 
