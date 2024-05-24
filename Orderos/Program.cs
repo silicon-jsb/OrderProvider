@@ -23,28 +23,34 @@ var host = new HostBuilder()
 		services.ConfigureFunctionsApplicationInsights();
 		services.AddScoped<SavedCoursesRepository>();
 		services.AddScoped<CourseService>();
-		services.AddDbContext<DataContext>(options =>
+		services.AddScoped<UserService>();
+        services.AddHostedService<CourseClientHostedService>();
+        services.AddDbContext<DataContext>(options =>
 			options.UseSqlServer(configuration.GetConnectionString("ORDERS_DATABASE")));
+
+
         services.AddSingleton(serviceProvider =>
         {
             var configuration = serviceProvider.GetRequiredService<IConfiguration>();
             var serviceBusConnectionString = configuration.GetConnectionString("ServiceBusConnectionString");
             return new ServiceBusClient(serviceBusConnectionString);
         });
+       
+        services.AddSingleton<CourseClient>(sp => new CourseClient(new HttpClient(), 
+			new ServiceBusClient("Endpoint=sb://courseprovider.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Q/rrVPV452ftyNuC9dEJDV84IoWUbvz8l+ASbDvjztg="), "OrderQ"));
 
-		
 
-        //fix this part
+
+
+
+        //fix this when user is working
 
         services.AddHttpClient<UserClient>(client =>
 		{
 			client.BaseAddress = new Uri("https://your-user-service-url");
 		});
 			
-		services.AddHttpClient<CourseClient>(client =>
-		{
-			client.BaseAddress = new Uri("https://CourseProvider.servicebus.windows.net/courseprovider");
-		});
+		
        
 
     })

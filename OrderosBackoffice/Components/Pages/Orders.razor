@@ -14,11 +14,14 @@
 }
 else
 {
+    //maybe not all of these but thats for design
     <table class="table">
         <thead>
             <tr>
                 <th>ID</th>
-                <th>User</th>
+                <th>UserId</th>
+                <th>Firstname</th>
+                <th>Lastname</th>
                 <th>Course ID</th>
                 <th>Course</th>
             </tr>
@@ -29,6 +32,8 @@ else
                 <tr>
                     <td>@order.Id</td>
                     <td>@order.UserId</td>
+                    <td>@order.FirstName</td>
+                    <td>@order.LastName</td>
                     <td>@order.CourseId</td>
                     <td>@order.CourseTitle</td>
                 </tr>
@@ -74,6 +79,8 @@ else
     private class Order
     {
         public int Id { get; set; }
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
         public string UserId { get; set; } = null!;
         public int CourseId { get; set; }
         public string CourseTitle { get; set; } = null!;

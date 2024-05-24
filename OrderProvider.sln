@@ -5,7 +5,7 @@ VisualStudioVersion = 17.9.34728.123
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Orderos", "Orderos\Orderos.csproj", "{1A04A0BB-C0DC-4B45-8B9C-C0990ED7E8E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderosBackoffice", "OrderosBackoffice\OrderosBackoffice.csproj", "{88936BA8-18FC-49C3-B883-A73CBA023DC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrderosBackoffice", "OrderosBackoffice\OrderosBackoffice.csproj", "{88936BA8-18FC-49C3-B883-A73CBA023DC5}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
