@@ -63,7 +63,7 @@ public class OrderFetcher
 		string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 		var savedCourse = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
 
-            // Get the user
+            // Get the user when user provider is up
             var userResponse = await _userService.GetUser(savedCourse.UserId);
             if (!userResponse.Success)
             {
