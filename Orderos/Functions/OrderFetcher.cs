@@ -63,13 +63,13 @@ public class OrderFetcher
 		string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
 		var savedCourse = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
 
-            // Get the user when user provider is up
-            var userResponse = await _userService.GetUser(savedCourse.UserId);
-            if (!userResponse.Success)
-            {
-                _logger.LogError(userResponse.Message);
-                return new NotFoundResult();
-            }
+            //// Get the user when user provider is up
+            //var userResponse = await _userService.GetUser(savedCourse.UserId);
+            //if (!userResponse.Success)
+            //{
+            //    _logger.LogError(userResponse.Message);
+            //    return new NotFoundResult();
+            //}
 
             var serviceResponse = await _courseService.SaveCourse(savedCourse);
 

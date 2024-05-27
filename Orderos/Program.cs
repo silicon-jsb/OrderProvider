@@ -26,7 +26,7 @@ var host = new HostBuilder()
 		services.AddScoped<UserService>();
         services.AddHostedService<CourseClientHostedService>();
         services.AddDbContext<DataContext>(options =>
-			options.UseSqlServer(configuration.GetConnectionString("ORDERS_DATABASE")));
+            options.UseSqlServer(Environment.GetEnvironmentVariable("ORDERS_DATABASE")));
 
 
         services.AddSingleton(serviceProvider =>
@@ -41,13 +41,9 @@ var host = new HostBuilder()
 
 
 
-
-
-        //fix this when user is working
-
         services.AddHttpClient<UserClient>(client =>
 		{
-			client.BaseAddress = new Uri("https://your-user-service-url");
+			client.BaseAddress = new Uri("https://userprovider-newsilicon-jsb.azurewebsites.net/api/users?code=vemQliZViS9smoTmYziSkRYrHLFxm5Q1RMKMSISjO5CUAzFu0W6oGA==");
 		});
 			
 		

@@ -60,7 +60,7 @@ else
         try
         {
             var functionKey = Configuration["AzureFunctionKey"];
-            var response = await HttpClient.GetAsync($"https://orderprovider-silicon-jsb.azurewebsites.net/api/orders/?code={functionKey}");
+            var response = await HttpClient.GetAsync($"https://orderprovider-newsilicon-jsb.azurewebsites.net/api/orders/?code={functionKey}");
             if (response.IsSuccessStatusCode)
             {
                 orders = await response.Content.ReadFromJsonAsync<Order[]>();
