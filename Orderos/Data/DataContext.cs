@@ -1,15 +1,28 @@
-﻿
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Orderos.Entities;
 
-namespace Orderos.Data;
-
-public class DataContext(DbContextOptions<DataContext> options) : DbContext(options)
+namespace Orderos.Data
 {
-	public DbSet<SavedCoursesEntity> SavedCourses { get; set; }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    public class DataContext : DbContext
     {
-        optionsBuilder.UseSqlServer("Server=tcp:sqlserver-silicon-jsb.database.windows.net,1433;Initial Catalog=orders_newdatabase;Persist Security Info=False;User ID=SqlAdmin;Password=Bytmig123!;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
+        private readonly IConfiguration _configuration;
+
+        public DataContext(DbContextOptions<DataContext> options, IConfiguration configuration)
+            : base(options)
+        {
+            _configuration = configuration;
+        }
+
+        public DbSet<SavedCoursesEntity> SavedCourses { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                var connectionString = System.Environment.GetEnvironmentVariable("ORDERS_DATABASE");
+                optionsBuilder.UseSqlServer(connectionString);
+            }
+        }
     }
 }

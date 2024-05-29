@@ -22,25 +22,16 @@ var host = new HostBuilder()
 		services.AddApplicationInsightsTelemetryWorkerService();
 		services.ConfigureFunctionsApplicationInsights();
 		services.AddScoped<SavedCoursesRepository>();
-		services.AddScoped<CourseService>();
 		services.AddScoped<UserService>();
         services.AddHostedService<CourseClientHostedService>();
         services.AddDbContext<DataContext>(options =>
             options.UseSqlServer(Environment.GetEnvironmentVariable("ORDERS_DATABASE")));
 
 
-        services.AddSingleton(serviceProvider =>
+        services.AddHttpClient<UserClient>(client =>
         {
-            var configuration = serviceProvider.GetRequiredService<IConfiguration>();
-            var serviceBusConnectionString = configuration.GetConnectionString("ServiceBusConnectionString");
-            return new ServiceBusClient(serviceBusConnectionString);
+            client.BaseAddress = new Uri("https://orderprovider-newsilicon-jsb.azurewebsites.net/api/users?code=vemQliZViS9smoTmYziSkRYrHLFxm5Q1RMKMSISjO5CUAzFu0W6oGA==");
         });
-       
-        services.AddSingleton<CourseClient>(sp => new CourseClient(new HttpClient(), 
-			new ServiceBusClient("Endpoint=sb://courseprovider.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=Q/rrVPV452ftyNuC9dEJDV84IoWUbvz8l+ASbDvjztg="), "OrderQ"));
-
-
-
         services.AddHttpClient<UserClient>(client =>
 		{
 			client.BaseAddress = new Uri("https://userprovider-newsilicon-jsb.azurewebsites.net/api/users?code=vemQliZViS9smoTmYziSkRYrHLFxm5Q1RMKMSISjO5CUAzFu0W6oGA==");
