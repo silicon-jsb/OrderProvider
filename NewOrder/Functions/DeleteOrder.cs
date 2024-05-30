@@ -20,7 +20,7 @@ public class DeleteOrder
     }
 
     [Function("DeleteOrder")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "orders/{id}")] HttpRequest req, string id)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "delete", Route = "orders/{id}")] HttpRequest req, int id)
     {
         var order = await _context.SavedCourses.FindAsync(id);
         if (order == null)
