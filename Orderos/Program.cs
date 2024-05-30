@@ -4,10 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Orderos.Clients;
-using Orderos.Data;
-using Orderos.Repositories;
-using Orderos.Services;
+using NewOrder.Clients;
+using NewOrder.Data;
+using NewOrder.Repositories;
+using NewOrder.Services;
 
 var host = new HostBuilder()
 	.ConfigureFunctionsWebApplication()

@@ -1,6 +1,6 @@
 ﻿
 
-namespace Orderos.Services;
+namespace NewOrder.Services;
 
 public class UserService
 {

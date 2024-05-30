@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Orderos.Entities;
+using NewOrder.Entities;
 
-namespace Orderos.Data
+namespace NewOrder.Data
 {
     public class DataContext : DbContext
     {

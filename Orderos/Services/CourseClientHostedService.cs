@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Hosting;
-using Orderos.Clients;
+using NewOrder.Clients;
 
-namespace Orderos.Services;
+namespace NewOrder.Services;
 
 public class CourseClientHostedService : IHostedService
 {

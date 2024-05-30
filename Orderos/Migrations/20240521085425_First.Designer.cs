@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using Orderos.Data;
+using NewOrder.Data;
 
 #nullable disable
 
-namespace Orderos.Migrations
+namespace NewOrder.Migrations
 {
     [DbContext(typeof(DataContext))]
     [Migration("20240521085425_First")]
