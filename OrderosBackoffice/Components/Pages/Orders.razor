@@ -2,6 +2,7 @@
 @inject IConfiguration Configuration
 
 @page "/orders"
+@rendermode InteractiveServer
 @attribute [StreamRendering]
 
 <PageTitle>Orders</PageTitle>
@@ -24,6 +25,7 @@ else
                 <th>Lastname</th>
                 <th>Course ID</th>
                 <th>Course</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
@@ -35,7 +37,8 @@ else
                     <td>@order.FirstName</td>
                     <td>@order.LastName</td>
                     <td>@order.CourseId</td>
-                    <td>@order.CourseTitle</td>
+                    <td>@order.CourseTitle</td>                 
+                    <td><button class="btn btn-danger">Delete</button></td>
                 </tr>
             }
         </tbody>
@@ -59,7 +62,7 @@ else
     {
         try
         {
-            var functionKey = Configuration["AzureFunctionKey"];
+            var functionKey = Configuration["AzureFunctionKeyOrders"];
             var response = await HttpClient.GetAsync($"https://orderprovider-newsilicon-jsb.azurewebsites.net/api/orders/?code={functionKey}");
             if (response.IsSuccessStatusCode)
             {
