@@ -1,10 +1,10 @@
 ﻿using Azure.Messaging.ServiceBus;
 using Microsoft.Azure.Amqp.Framing;
 using Newtonsoft.Json;
-using Orderos.Models;
+using NewOrder.Models;
 using System.Threading.Tasks;
 
-namespace Orderos.Clients
+namespace NewOrder.Clients
 {
     public class CourseClient
     {

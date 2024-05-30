@@ -1,6 +1,6 @@
 ﻿
 
-namespace Orderos.Clients;
+namespace NewOrder.Clients;
 
 public class UserClient
 {

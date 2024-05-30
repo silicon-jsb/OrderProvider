@@ -2,7 +2,7 @@
 
 #nullable disable
 
-namespace Orderos.Migrations
+namespace NewOrder.Migrations
 {
     /// <inheritdoc />
     public partial class First : Migration
