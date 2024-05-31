@@ -19,23 +19,24 @@ public class SaveOrder
         _context = context;
     }
 
-    [Function("SaveOrder")]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "orders")] HttpRequest req)
+    [Function("SaveCourse")]
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Function, "post", Route = "courses")] HttpRequest req)
     {
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-        var order = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
+        var savedCourse = JsonConvert.DeserializeObject<SavedCoursesEntity>(requestBody);
 
         try
         {
-            _context.SavedCourses.Add(order);
+            _context.SavedCourses.Add(savedCourse);
             await _context.SaveChangesAsync();
 
-            return new OkObjectResult(order);
+            return new OkObjectResult(savedCourse);
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "An error occurred while saving the order.");
+            _logger.LogError(ex, "An error occurred while saving the course.");
             return new StatusCodeResult(StatusCodes.Status500InternalServerError);
         }
     }
+
 }

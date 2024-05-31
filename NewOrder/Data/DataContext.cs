@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NewOrder.Entities;
 
@@ -20,8 +21,9 @@ public class DataContext : DbContext
     {
         if (!optionsBuilder.IsConfigured)
         {
-            var connectionString = Environment.GetEnvironmentVariable("ORDERS_DATABASE");
-            optionsBuilder.UseSqlServer(connectionString);
+            var connectionString = _configuration.GetConnectionString("DefaultConnection");
+            optionsBuilder.UseSqlServer(new SqlConnection(connectionString));
         }
     }
+
 }

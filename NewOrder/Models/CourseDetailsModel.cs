@@ -2,9 +2,9 @@
 namespace NewOrder.Models;
 
 
-public class CourseModel
+public class CourseDetailsModel
 {
-    public string Id { get; set; } = null!;
+    public string? Id { get; set; }
     public string? ImageUri { get; set; }
     public string? ImageHeaderUri { get; set; }
     public bool IsBestseller { get; set; }
@@ -12,41 +12,40 @@ public class CourseModel
     public List<string>? Categories { get; set; }
     public string? Title { get; set; }
     public string? Ingress { get; set; }
-    public decimal StarRating { get; set; }
+    public int StarRating { get; set; }
     public string? Reviews { get; set; }
     public string? Likes { get; set; }
     public string? LikesInPercent { get; set; }
     public string? Hours { get; set; }
-
-    public virtual List<Author>? Authors { get; set; }
-    public virtual Prices? Prices { get; set; }
-    public virtual Content? Content { get; set; }
+    public List<CourseAuthor>? Authors { get; set; }
+    public CoursePrice? Prices { get; set; }
+    public CourseContent? Content { get; set; }
 }
 
-
-public class Content
-{
-    public string? Description { get; set; }
-    public string[]? Includes { get; set; }
-    public virtual List<ProgramDetailItem>? ProgramDetails { get; set; }
-}
-
-public class Author
+public class CourseAuthor
 {
     public string? Name { get; set; }
     public string? AuthorImage { get; set; }
 }
 
-public class Prices
+public class CoursePrice
 {
     public string? Currency { get; set; }
-    public decimal Price { get; set; }
-    public decimal Discount { get; set; }
+    public double Price { get; set; }
+    public int Discount { get; set; }
 }
 
-public class ProgramDetailItem
+public class CourseContent
+{
+    public string? Description { get; set; }
+    public List<string>? Includes { get; set; }
+    public List<ProgramDetail>? ProgramDetails { get; set; }
+}
+
+public class ProgramDetail
 {
     public int Id { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
 }
+
